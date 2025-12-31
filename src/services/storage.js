@@ -8,6 +8,11 @@ class StorageAdapter {
   constructor() {
     this.useGoogleSheets = true; // Always true
     this.pendingChanges = JSON.parse(localStorage.getItem('pendingChanges') || '[]');
+    
+    // Privacy: Start empty on fresh load (User Request)
+    // We keep settings (theme etc) and pending writes, but clear data
+    localStorage.removeItem('habits');
+    localStorage.removeItem('logs');
   }
 
   // Helper to queue changes
