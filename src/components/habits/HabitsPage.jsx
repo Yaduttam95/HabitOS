@@ -25,12 +25,12 @@ export const HabitsPage = () => {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold mb-2">Yearly Overview</h1>
           <p className="text-[var(--text-muted)]">Track your consistency across the year.</p>
         </div>
-        <Button onClick={handleAdd}>
+        <Button onClick={handleAdd} className="w-full sm:w-auto justify-center">
           <Plus className="w-4 h-4 mr-2" /> Add Habit
         </Button>
       </div>

@@ -87,14 +87,15 @@ export const Dashboard = () => {
   return (
     <div className="space-y-8 pb-10">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold mb-1">HabitOS</h1>
+          <h1 className="text-3xl font-bold mb-1">Habit OS</h1>
           <p className="text-[var(--text-muted)]">Track your daily habits and build consistency</p>
         </div>
         
-        <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 bg-[var(--bg-card)] p-1 rounded-xl border border-[var(--border-base)] shadow-sm">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <div className="flex items-center gap-2 bg-[var(--bg-card)] p-1 rounded-xl border border-[var(--border-base)] shadow-sm w-full sm:w-auto justify-between sm:justify-start">
                 <Button variant="ghost" size="sm" onClick={() => handleMonthChange('prev')}>
                     <ChevronLeft className="w-5 h-5" />
                 </Button>
@@ -106,12 +107,12 @@ export const Dashboard = () => {
                 </Button>
             </div>
             
-            <div className="flex gap-3">
-              <Button onClick={handleSync} disabled={syncing} variant="outline">
+            <div className="flex gap-3 w-full sm:w-auto">
+              <Button onClick={handleSync} disabled={syncing} variant="outline" className="flex-1 sm:flex-none justify-center">
                 <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
                 {syncing ? 'Syncing...' : 'Sync'}
               </Button>
-              <Button onClick={handleAddHabit}>
+              <Button onClick={handleAddHabit} className="flex-1 sm:flex-none justify-center">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Habit
               </Button>

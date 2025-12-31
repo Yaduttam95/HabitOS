@@ -16,26 +16,29 @@
   --color-primary-600: #4f46e5;
   --color-primary-900: #312e81;
 
-  /* Semantic Colors - Default Dark */
-  --bg-app: #0a0a0a;       /* neutral-950 */
-  --bg-card: #171717;      /* neutral-900 */
-  --bg-card-glass: rgba(23, 23, 23, 0.5);
-  --bg-hover: #262626;     /* neutral-800 */
-  --text-base: #f5f5f5;    /* neutral-100 */
-  --text-muted: #a3a3a3;   /* neutral-400 */
-  --border-base: #262626;  /* neutral-800 */
+  /* Professional "Zinc" Dark Theme */
+  --bg-app: #09090b;       /* Zinc 950 */
+  --bg-card: #18181b;      /* Zinc 900 */
+  --bg-card-glass: rgba(24, 24, 27, 0.5);
+  --bg-hover: #27272a;     /* Zinc 800 */
+  --bg-subtle: #27272a;    /* Zinc 800 - Added for unchecked states */
+  --text-base: #fafafa;    /* Zinc 50 */
+  --text-muted: #a1a1aa;   /* Zinc 400 */
+  --border-base: #3f3f46;  /* Zinc 700 - Higher contrast for visibility */
 }
 
 :root[data-mode="light"] {
-  --bg-app: #f5f5f5;       /* neutral-50ish */
-  --bg-card: #ffffff;      /* white */
-  --bg-card-glass: rgba(255, 255, 255, 0.8);
-  --bg-hover: #e5e5e5;     /* neutral-200 */
-  --text-base: #171717;    /* neutral-900 */
-  --text-muted: #525252;   /* neutral-600 - Darkened for better contrast */
-  --border-base: #e5e5e5;  /* neutral-200 */
+  /* Professional "Zinc" Light Theme */
+  --bg-app: #ffffff;       /* White */
+  --bg-card: #ffffff;      /* White */
+  --bg-card-glass: rgba(255, 255, 255, 0.9);
+  --bg-hover: #f4f4f5;     /* Zinc 100 */
+  --bg-subtle: #f4f4f5;    /* Zinc 100 */
+  --text-base: #18181b;    /* Zinc 900 */
+  --text-muted: #71717a;   /* Zinc 500 */
+  --border-base: #e4e4e7;  /* Zinc 200 */
   
-  /* Adjust primary for better contrast if needed, enables keeping same vars */
+  /* Adjust primary for better contrast in light mode if needed */
 }
 
 body {
