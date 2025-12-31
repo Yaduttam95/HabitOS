@@ -77,7 +77,8 @@ export const DailyProgressChart = ({ currentDate, logs, onPrevMonth, onNextMonth
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: 'var(--bg-card)', 
+                backgroundColor: 'var(--bg-card-glass)', 
+                backdropFilter: 'blur(8px)',
                 borderColor: 'var(--border-base)',
                 color: 'var(--text-base)',
                 borderRadius: '8px',

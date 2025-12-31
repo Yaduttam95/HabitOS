@@ -55,7 +55,8 @@ export const ScreenTimeChart = ({ logs, days = 14, height = 300, showAxis = true
           )}
           <Tooltip 
             contentStyle={{ 
-              backgroundColor: 'var(--bg-card)', 
+              backgroundColor: 'var(--bg-card-glass)', 
+              backdropFilter: 'blur(8px)',
               borderColor: 'var(--border-base)',
               color: 'var(--text-base)',
               borderRadius: '12px',

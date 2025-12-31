@@ -24,10 +24,10 @@ export const HabitsPage = () => {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-        <div>
-          <h1 className="text-3xl font-bold mb-2">Yearly Overview</h1>
+    <div className="space-y-8 flex flex-col items-center w-full">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 w-full max-w-5xl px-4">
+        <div className="text-center sm:text-left">
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 mb-2 drop-shadow-sm">Yearly Overview</h1>
           <p className="text-[var(--text-muted)]">Track your consistency across the year.</p>
         </div>
         <Button onClick={handleAdd} className="w-full sm:w-auto justify-center">
@@ -35,14 +35,14 @@ export const HabitsPage = () => {
         </Button>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 w-full flex flex-col items-center">
         {habits.length === 0 ? (
-           <Card className="p-12 text-center text-[var(--text-muted)]">
+           <Card className="p-12 text-center text-[var(--text-muted)] w-full max-w-2xl">
              No habits found. Create one to see the heatmap!
            </Card>
         ) : (
           habits.map(habit => (
-            <Card key={habit.id} className="overflow-hidden">
+            <Card key={habit.id} className="overflow-hidden w-fit max-w-full">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-3">
                   <div className={`w-3 h-3 rounded-full bg-primary-500`} />

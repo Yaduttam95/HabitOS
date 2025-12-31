@@ -1,6 +1,6 @@
 // Theme definitions
 export const THEMES = {
-  indigo: { name: 'Indigo', colors: { 400: '#818cf8', 500: '#6366f1', 600: '#4f46e5', 900: '#312e81' } },
+  indigo: { name: 'Royal Blue', colors: { 400: '#60a5fa', 500: '#3b82f6', 600: '#2563eb', 900: '#1e3a8a' } },
   emerald: { name: 'Emerald', colors: { 400: '#34d399', 500: '#10b981', 600: '#059669', 900: '#064e3b' } },
   rose: { name: 'Rose', colors: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48', 900: '#881337' } },
   orange: { name: 'Orange', colors: { 400: '#fb923c', 500: '#f97316', 600: '#ea580c', 900: '#7c2d12' } },

@@ -54,7 +54,7 @@ export const ReportsPage = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Reports</h1>
+        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 mb-2 drop-shadow-sm">Reports</h1>
         <p className="text-[var(--text-muted)]">Analyze your progress over time.</p>
       </div>
 
@@ -81,8 +81,14 @@ export const ReportsPage = () => {
                   axisLine={false}
                 />
                <Tooltip 
-                  contentStyle={{ backgroundColor: '#171717', border: '1px solid #262626', borderRadius: '8px' }}
-                  itemStyle={{ color: '#fff' }}
+                  contentStyle={{ 
+                    backgroundColor: 'var(--bg-card-glass)', 
+                    backdropFilter: 'blur(8px)',
+                    borderColor: 'var(--border-base)', 
+                    borderRadius: '8px',
+                    color: 'var(--text-base)'
+                  }}
+                  itemStyle={{ color: 'var(--color-primary-500)' }}
                />
                <Line 
                  type="monotone" 

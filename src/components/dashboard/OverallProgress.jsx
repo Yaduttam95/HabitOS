@@ -34,7 +34,7 @@ export const OverallProgress = ({ currentDate }) => {
         <h3 className="text-lg font-bold text-[var(--text-base)]">Overall Progress</h3>
       </div>
 
-      <div className="space-y-6 overflow-y-auto flex-1" style={{ maxHeight: '500px' }}>
+      <div className="space-y-6 overflow-y-auto flex-1 pr-4" style={{ maxHeight: '500px' }}>
         {habitStats.length === 0 ? (
              <p className="text-sm text-[var(--text-muted)]">No habits to show.</p>
         ) : (

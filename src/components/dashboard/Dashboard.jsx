@@ -11,14 +11,21 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, addDays, subDays, isSameDay, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { calculateStreak } from '../../utils/stats';
 
-const StatCard = ({ icon: Icon, label, value, color }) => (
-  <Card className="flex items-center gap-4">
-    <div className={`p-3 rounded-xl ${color}`}>
-      <Icon className="w-6 h-6 text-white" />
+import { TrendingUp, Award, Calendar, CheckCircle2 } from 'lucide-react';
+
+const StatCard = ({ icon: Icon, label, value, colorClass }) => (
+  <Card className={`relative overflow-hidden group hover:border-${colorClass}-500/50 transition-colors`}>
+    <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-${colorClass}-500`}>
+      <Icon className="w-16 h-16 transform translate-x-4 -translate-y-4" />
     </div>
-    <div>
-      <p className="text-sm text-[var(--text-muted)] font-medium">{label}</p>
-      <p className="text-2xl font-bold text-[var(--text-base)]">{value}</p>
+    <div className="relative z-10 flex flex-col justify-between h-full space-y-2">
+      <div className={`p-2 w-fit rounded-lg bg-${colorClass}-500/10 text-${colorClass}-500`}>
+        <Icon className="w-5 h-5" />
+      </div>
+      <div>
+        <h3 className="text-2xl font-bold text-[var(--text-base)]">{value}</h3>
+        <p className="text-sm font-medium text-[var(--text-muted)]">{label}</p>
+      </div>
     </div>
   </Card>
 );
@@ -94,9 +101,9 @@ export const Dashboard = () => {
       />
       {/* Header */}
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
         <div>
-          <h1 className="text-3xl font-bold mb-1">Habit OS</h1>
+          <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 mb-2 drop-shadow-sm">Habit OS</h1>
           <p className="text-[var(--text-muted)]">Track your daily habits and build consistency</p>
         </div>
         
@@ -127,9 +134,9 @@ export const Dashboard = () => {
       </div>
 
       {/* Main Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
         {/* Left Column: Monthly Grid */}
-        <div className="lg:col-span-2">
+        <div className="xl:col-span-2">
             <MonthlyGrid currentDate={currentDate} />
         </div>
 
@@ -150,23 +157,31 @@ export const Dashboard = () => {
       </div>
 
       {/* Bottom: Colored Stats & Sleep */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <Card className="bg-blue-500/10 border-blue-500/20">
-            <h3 className="text-2xl font-bold text-blue-600 mb-1">{totalCompleted}</h3>
-            <p className="text-sm font-medium text-blue-600/80">Total Completed</p>
-        </Card>
-        <Card className="bg-emerald-500/10 border-emerald-500/20">
-            <h3 className="text-2xl font-bold text-emerald-600 mb-1">{averageRate}%</h3>
-            <p className="text-sm font-medium text-emerald-600/80">Average Rate</p>
-        </Card>
-        <Card className="bg-purple-500/10 border-purple-500/20">
-            <h3 className="text-2xl font-bold text-purple-600 mb-1">{bestDayCount}</h3>
-            <p className="text-sm font-medium text-purple-600/80">Best Day</p>
-        </Card>
-        <Card className="bg-orange-500/10 border-orange-500/20">
-            <h3 className="text-2xl font-bold text-orange-600 mb-1">{activeDays}</h3>
-            <p className="text-sm font-medium text-orange-600/80">Active Days</p>
-        </Card>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+        <StatCard 
+            icon={CheckCircle2}
+            label="Total Completed"
+            value={totalCompleted}
+            colorClass="blue"
+        />
+        <StatCard 
+            icon={TrendingUp}
+            label="Average Rate"
+            value={`${averageRate}%`}
+            colorClass="emerald"
+        />
+        <StatCard 
+            icon={Award}
+            label="Best Day"
+            value={bestDayCount}
+            colorClass="purple"
+        />
+        <StatCard 
+            icon={Calendar}
+            label="Active Days"
+            value={activeDays}
+            colorClass="orange"
+        />
       </div>
       
       {/* Retain Sleep Widget as a smaller section or integrate later. For now, let's keep it simple as requested UI didn't show it explicitly but user might still want it. I'll add a small discrete section below. */}

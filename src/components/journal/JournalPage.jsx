@@ -32,7 +32,7 @@ export const JournalPage = () => {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold mb-2">Journal</h1>
+        <h1 className="text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-600 mb-2 drop-shadow-sm">Journal</h1>
         <p className="text-[var(--text-muted)]">Reflect on your journey.</p>
       </div>
 

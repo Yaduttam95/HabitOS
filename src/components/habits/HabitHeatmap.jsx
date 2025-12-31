@@ -14,27 +14,24 @@ export const HabitHeatmap = ({ habitId, logs, color = 'bg-green-500' }) => {
   // logs structure: { "2024-01-01": { completedHabits: ["id1", ...] } }
   
   return (
-    <div className="flex flex-col gap-1 overflow-x-auto pb-4 custom-scrollbar">
-      <div className="flex text-xs text-[var(--text-muted)] gap-1 mb-1">
-        {/* Simplified weak implementation: just list months roughly */}
-        {['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map(m => (
-          <div key={m} className="flex-1 min-w-[30px]">{m}</div>
-        ))}
+    <div className="flex flex-col gap-2 overflow-x-auto pb-4 custom-scrollbar">
+      {/* Month Headers */}
+      <div className="flex text-xs text-[var(--text-muted)] h-5 relative" style={{ minWidth: 'max-content' }}>
+        {eachDayOfInterval({ start: startDate, end: endDate })
+          .filter(d => d.getDate() === 1) // Get 1st of each month
+          .map(d => {
+             const dayIndex = Math.floor((d - startDate) / (1000 * 60 * 60 * 24));
+             const colIndex = Math.floor(dayIndex / 7);
+             return (
+               <div key={d.toString()} className="absolute" style={{ left: `${colIndex * 15}px` }}>
+                 {format(d, 'MMM')}
+               </div>
+             );
+          })
+        }
       </div>
       
-      <div className="flex flex-wrap gap-[3px] h-[100px] content-start flex-col w-full max-w-full overflow-hidden" 
-           style={{ height: '112px', width: 'max-content' }}> 
-           {/* GitHub style is usually column-major (weeks) */}
-           {/* But CSS grid row-major is easier. Let's try row-major or simple flex wrap? 
-               GitHub uses SVG or Canvas or Flex column-major (weeks). 
-               Let's stick to a simple flex row wrap grid or CSS Grid 53 columns x 7 rows.
-           */}
-      </div>
-    
-      {/* 
-         Better approach: CSS Grid 
-         52-53 cols, 7 rows.
-      */}
+      {/* Heatmap Grid */}
       <div className="grid grid-rows-7 grid-flow-col gap-[3px]" style={{ width: 'max-content' }}>
         {days.map(day => {
           const dateStr = format(day, 'yyyy-MM-dd');
