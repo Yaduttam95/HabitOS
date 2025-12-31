@@ -73,14 +73,15 @@ export async function getHabits(useCache = true) {
   return data.habits;
 }
 
-export async function addHabit(name, color = 'indigo', icon = '⚡️') {
+export async function addHabit(name, color = 'indigo', icon = '⚡️', id = null) {
   const data = await fetchAPI(API_URL, {
     method: 'POST',
     body: JSON.stringify({
       action: 'addHabit',
       name,
       color,
-      icon
+      icon,
+      id
     })
   });
   

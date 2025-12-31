@@ -61,15 +61,24 @@ export const DataProvider = ({ children }) => {
 
   const refreshData = async () => {
     try {
-      const [loadedHabits, loadedLogs] = await Promise.all([
-        storage.getHabits(),
-        storage.getLogs()
-      ]);
+      setSyncing(true);
+      setError(null);
+      
+      const { habits: loadedHabits, logs: loadedLogs, settings: loadedSettings } = await storage.syncData();
       
       setHabits(loadedHabits);
       setLogs(loadedLogs);
+      setSettings(loadedSettings);
+      
+      // Re-apply theme/mode in case settings changed on another device
+      applyTheme(loadedSettings.theme || 'indigo');
+      applyMode(loadedSettings.mode || 'dark');
     } catch (err) {
-      console.error('Error refreshing data:', err);
+      console.error('Error syncing data:', err);
+      setError('Sync failed: ' + err.message);
+      throw err;
+    } finally {
+      setSyncing(false);
     }
   };
 
