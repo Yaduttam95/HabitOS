@@ -2,12 +2,17 @@ import { format, subDays, eachDayOfInterval } from 'date-fns';
 
 const RAW_API_URL = import.meta.env.VITE_APPS_SCRIPT_URL;
 
-// CORS proxy to bypass Google Apps Script restrictions
-// Using proxy in production too because Google's redirects often trigger strict CORS blocks
-const USE_CORS_PROXY = true;
-const CORS_PROXY = 'https://corsproxy.io/?';
+// Determine environment
+const IS_LOCALHOST = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
 
-const API_URL = USE_CORS_PROXY ? CORS_PROXY + encodeURIComponent(RAW_API_URL) : RAW_API_URL;
+// In production (Netlify), use the Netlify Function proxy
+// In development (Localhost), use corsproxy.io (or direct if strict mode off)
+const CORS_PROXY_DEV = 'https://corsproxy.io/?';
+const NETLIFY_FUNCTION_URL = '/.netlify/functions/proxy';
+
+const API_URL = IS_LOCALHOST 
+  ? (true ? CORS_PROXY_DEV + encodeURIComponent(RAW_API_URL) : RAW_API_URL) // Use corsproxy locally
+  : NETLIFY_FUNCTION_URL; // Use Netlify Function in production
 
 // Cache for performance
 let cache = {
