@@ -8,11 +8,7 @@ class StorageAdapter {
   constructor() {
     this.useGoogleSheets = true; // Always true
     this.pendingChanges = JSON.parse(localStorage.getItem('pendingChanges') || '[]');
-    
-    // Privacy: Start empty on fresh load (User Request)
-    // We keep settings (theme etc) and pending writes, but clear data
-    localStorage.removeItem('habits');
-    localStorage.removeItem('logs');
+    // No need to wipe manually; sessionStorage is naturally empty on new session
   }
 
   // Helper to queue changes
@@ -73,8 +69,9 @@ class StorageAdapter {
     ]);
 
     // 3. Update Local Storage with fresh data
-    localStorage.setItem('habits', JSON.stringify(habits));
-    localStorage.setItem('logs', JSON.stringify(logs));
+    // 3. Update Storage (Habits/Logs -> Session, Settings -> Local)
+    sessionStorage.setItem('habits', JSON.stringify(habits));
+    sessionStorage.setItem('logs', JSON.stringify(logs));
     localStorage.setItem('settings', JSON.stringify(settings));
 
     return { habits, logs, settings };
@@ -85,12 +82,12 @@ class StorageAdapter {
   // ============================================
 
   async getHabits() {
-    const habits = localStorage.getItem('habits');
+    const habits = sessionStorage.getItem('habits');
     return habits ? JSON.parse(habits) : [];
   }
 
   async getLogs() {
-    const logs = localStorage.getItem('logs');
+    const logs = sessionStorage.getItem('logs');
     return logs ? JSON.parse(logs) : {};
   }
 
@@ -118,9 +115,9 @@ class StorageAdapter {
       icon: '⚡️'
     };
     
-    // 1. Update Local
+    // 1. Update Session
     habits.push(newHabit);
-    localStorage.setItem('habits', JSON.stringify(habits));
+    sessionStorage.setItem('habits', JSON.stringify(habits));
     
     // 2. Queue Change (Pass the ID so backend uses it)
     this.queueChange('addHabit', { 
@@ -136,9 +133,9 @@ class StorageAdapter {
   async deleteHabit(id) {
     const habits = await this.getHabits();
     
-    // 1. Update Local
+    // 1. Update Session
     const filtered = habits.filter(h => h.id !== id);
-    localStorage.setItem('habits', JSON.stringify(filtered));
+    sessionStorage.setItem('habits', JSON.stringify(filtered));
     
     // 2. Queue Change
     this.queueChange('deleteHabit', { id });
@@ -149,7 +146,7 @@ class StorageAdapter {
     const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
     const completedHabits = log.completedHabits || [];
     
-    // 1. Update Local
+    // 1. Update Session
     const index = completedHabits.indexOf(habitId);
     if (index > -1) {
       completedHabits.splice(index, 1);
@@ -159,7 +156,7 @@ class StorageAdapter {
     
     const updatedLog = { ...log, completedHabits };
     logs[dateStr] = updatedLog;
-    localStorage.setItem('logs', JSON.stringify(logs));
+    sessionStorage.setItem('logs', JSON.stringify(logs));
     
     // 2. Queue Change (Send entire log for that day)
     this.queueChange('updateLog', { dateStr, logData: updatedLog });
@@ -171,10 +168,10 @@ class StorageAdapter {
     const logs = await this.getLogs();
     const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
     
-    // 1. Update Local
+    // 1. Update Session
     const updatedLog = { ...log, sleep: hours };
     logs[dateStr] = updatedLog;
-    localStorage.setItem('logs', JSON.stringify(logs));
+    sessionStorage.setItem('logs', JSON.stringify(logs));
     
     // 2. Queue Change
     this.queueChange('updateLog', { dateStr, logData: updatedLog });
@@ -186,10 +183,10 @@ class StorageAdapter {
     const logs = await this.getLogs();
     const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
     
-    // 1. Update Local
+    // 1. Update Session
     const updatedLog = { ...log, journal: content };
     logs[dateStr] = updatedLog;
-    localStorage.setItem('logs', JSON.stringify(logs));
+    sessionStorage.setItem('logs', JSON.stringify(logs));
     
     // 2. Queue Change
     this.queueChange('updateLog', { dateStr, logData: updatedLog });

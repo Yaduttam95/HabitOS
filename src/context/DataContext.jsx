@@ -45,6 +45,18 @@ export const DataProvider = ({ children }) => {
       setLogs(loadedLogs);
       setSettings(loadedSettings);
       
+      // Auto-Sync on First Load (Fresh Session) logic
+      // If we have 0 habits loaded from sessionStorage, it's likely a fresh session
+      // (Unless the user truly has 0 habits, in which case a sync won't hurt)
+      if (loadedHabits.length === 0) {
+        console.log('Fresh session detected. Auto-syncing...');
+        // We call refreshData() but we don't await it to let UI render empty state first
+        // or we await it if we want to show loading spinner. 
+        // Let's trigger it in background so it feels snappy?
+        // Actually user wants "Sync automatically", so let's just call it.
+        refreshData(); 
+      }
+      
       // Configure storage adapter
       storage.setUseGoogleSheets(loadedSettings.useGoogleSheets || false);
       
