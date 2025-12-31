@@ -105,14 +105,14 @@ class StorageAdapter {
   // WRITES (Local Update + Queue)
   // ============================================
 
-  async addHabit(name) {
+  async addHabit(name, color = 'indigo', icon = '⚡️') {
     const habits = await this.getHabits();
     const newHabit = {
       id: `habit-${Date.now()}`, // Generate local ID
       name,
       createdAt: new Date().toISOString(),
-      color: 'indigo',
-      icon: '⚡️'
+      color,
+      icon
     };
     
     // 1. Update Session
@@ -170,6 +170,21 @@ class StorageAdapter {
     
     // 1. Update Session
     const updatedLog = { ...log, sleep: hours };
+    logs[dateStr] = updatedLog;
+    sessionStorage.setItem('logs', JSON.stringify(logs));
+    
+    // 2. Queue Change
+    this.queueChange('updateLog', { dateStr, logData: updatedLog });
+    
+    return updatedLog;
+  }
+
+  async updateScreenTime(dateStr, hours) {
+    const logs = await this.getLogs();
+    const log = logs[dateStr] || { completedHabits: [], sleep: 0, screenTime: 0, journal: '' };
+    
+    // 1. Update Session
+    const updatedLog = { ...log, screenTime: hours };
     logs[dateStr] = updatedLog;
     sessionStorage.setItem('logs', JSON.stringify(logs));
     

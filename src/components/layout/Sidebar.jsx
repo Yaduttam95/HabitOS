@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X } from 'lucide-react';
+import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X, Smartphone } from 'lucide-react';
 import clsx from 'clsx';
 
 const NavItem = ({ to, icon: Icon, label, onClick }) => (
@@ -26,6 +26,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/habits', label: 'Habits', icon: Target },
     { path: '/sleep', label: 'Sleep', icon: Moon },
+    { path: '/screentime', label: 'Screen Time', icon: Smartphone },
     { path: '/reports', label: 'Reports', icon: TrendingUp },
     { path: '/journal', label: 'Journal', icon: BookOpen },
   ];

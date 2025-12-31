@@ -2,24 +2,24 @@ import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
 import { Card } from '../ui/Card';
 import { Button } from '../ui/Button';
-import { SleepChart } from './SleepChart';
-import { Moon, Save, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ScreenTimeChart } from './ScreenTimeChart';
+import { Smartphone, Save, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, subDays, addDays, startOfMonth, addMonths, subMonths, isSameMonth } from 'date-fns';
 
-export const SleepPage = () => {
-  const { logs, updateSleep } = useData();
+export const ScreenTimePage = () => {
+  const { logs, updateScreenTime } = useData();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [chartDate, setChartDate] = useState(new Date()); // Separate state for chart month navigation
-  const [sleepHours, setSleepHours] = useState('');
+  const [screenTimeHours, setScreenTimeHours] = useState('');
 
   const dateStr = format(selectedDate, 'yyyy-MM-dd');
-  const currentSleep = logs[dateStr]?.sleep || 0;
+  const currentScreenTime = logs[dateStr]?.screenTime || 0;
 
   const handleSave = () => {
-    const hours = parseFloat(sleepHours);
+    const hours = parseFloat(screenTimeHours);
     if (!isNaN(hours) && hours >= 0 && hours <= 24) {
-      updateSleep(dateStr, hours);
-      setSleepHours('');
+      updateScreenTime(dateStr, hours);
+      setScreenTimeHours('');
     } else {
       alert('Please enter a valid number between 0 and 24');
     }
@@ -35,7 +35,7 @@ export const SleepPage = () => {
       setSelectedDate(tomorrow);
     }
   };
-  
+
   const handlePrevMonth = () => {
     setChartDate(prev => subMonths(prev, 1));
   };
@@ -52,15 +52,15 @@ export const SleepPage = () => {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold mb-2">Sleep Tracker</h1>
-        <p className="text-[var(--text-muted)]">Track your sleep patterns and improve your rest.</p>
+        <h1 className="text-3xl font-bold mb-2">Screen Time Tracker</h1>
+        <p className="text-[var(--text-muted)]">Track your daily device usage.</p>
       </div>
 
       {/* Date Selection & Input Card */}
       <Card className="p-6">
         <div className="flex items-center gap-2 mb-6">
-          <Moon className="w-5 h-5 text-primary-500" />
-          <h3 className="text-lg font-bold text-[var(--text-base)]">Log Sleep Hours</h3>
+          <Smartphone className="w-5 h-5 text-primary-500" />
+          <h3 className="text-lg font-bold text-[var(--text-base)]">Log Screen Time</h3>
         </div>
 
         {/* Date Navigation */}
@@ -88,11 +88,11 @@ export const SleepPage = () => {
           </Button>
         </div>
 
-        {/* Current Sleep Display */}
-        {currentSleep > 0 && (
+        {/* Current Screen Time Display */}
+        {currentScreenTime > 0 && (
           <div className="mb-4 p-4 rounded-xl bg-primary-500/10 border border-primary-500/20">
-            <p className="text-sm text-[var(--text-muted)] mb-1">Current sleep logged</p>
-            <p className="text-2xl font-bold text-primary-500">{currentSleep} hours</p>
+            <p className="text-sm text-[var(--text-muted)] mb-1">Current screen time logged</p>
+            <p className="text-2xl font-bold text-primary-500">{currentScreenTime} hours</p>
           </div>
         )}
 
@@ -100,22 +100,22 @@ export const SleepPage = () => {
         <div className="flex gap-4">
           <div className="flex-1">
             <label className="block text-sm text-[var(--text-muted)] mb-2">
-              Sleep Hours
+              Hours
             </label>
             <input
               type="number"
               step="0.5"
               min="0"
               max="24"
-              value={sleepHours}
-              onChange={(e) => setSleepHours(e.target.value)}
+              value={screenTimeHours}
+              onChange={(e) => setScreenTimeHours(e.target.value)}
               className="w-full bg-[var(--bg-app)] border border-[var(--border-base)] rounded-xl px-4 py-3 text-[var(--text-base)] focus:ring-2 focus:ring-primary-500 outline-none transition-all"
-              placeholder={currentSleep > 0 ? `${currentSleep} hours logged` : "e.g. 7.5"}
+              placeholder={currentScreenTime > 0 ? `${currentScreenTime} hours logged` : "e.g. 4.5"}
               disabled={isFuture}
             />
           </div>
           <div className="flex items-end">
-            <Button onClick={handleSave} disabled={isFuture || !sleepHours}>
+            <Button onClick={handleSave} disabled={isFuture || !screenTimeHours}>
               <Save className="w-4 h-4 mr-2" />
               Save
             </Button>
@@ -124,16 +124,16 @@ export const SleepPage = () => {
 
         {isFuture && (
           <p className="text-sm text-yellow-500 mt-2">
-            Cannot log sleep for future dates
+            Cannot log data for future dates
           </p>
         )}
       </Card>
 
-      {/* Sleep Chart */}
+      {/* Chart */}
       <Card className="p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <Moon className="w-5 h-5 text-primary-500" />
+            <Smartphone className="w-5 h-5 text-primary-500" />
             <h3 className="text-lg font-bold text-[var(--text-base)]">Monthly Overview</h3>
           </div>
           
@@ -154,7 +154,7 @@ export const SleepPage = () => {
             </Button>
           </div>
         </div>
-        <SleepChart logs={logs} selectedMonth={chartDate} height={300} />
+        <ScreenTimeChart logs={logs} selectedMonth={chartDate} height={300} />
       </Card>
     </div>
   );

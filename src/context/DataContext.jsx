@@ -94,12 +94,12 @@ export const DataProvider = ({ children }) => {
     }
   };
 
-  const addHabit = async (name) => {
+  const addHabit = async (name, color, icon) => {
     try {
       setSyncing(true);
       setError(null);
       
-      const newHabit = await storage.addHabit(name);
+      const newHabit = await storage.addHabit(name, color, icon);
       
       // Refresh habits list
       const updatedHabits = await storage.getHabits();
@@ -166,6 +166,25 @@ export const DataProvider = ({ children }) => {
     } catch (err) {
       console.error('Error updating sleep:', err);
       setError('Failed to update sleep');
+      throw err;
+    } finally {
+      setSyncing(false);
+    }
+  };
+
+  const updateScreenTime = async (date, hours) => {
+    try {
+      setSyncing(true);
+      setError(null);
+      
+      await storage.updateScreenTime(date, hours);
+      
+      // Refresh logs
+      const updatedLogs = await storage.getLogs();
+      setLogs(updatedLogs);
+    } catch (err) {
+      console.error('Error updating screen time:', err);
+      setError('Failed to update screen time');
       throw err;
     } finally {
       setSyncing(false);
@@ -255,6 +274,7 @@ export const DataProvider = ({ children }) => {
       deleteHabit, 
       toggleHabit, 
       updateSleep,
+      updateScreenTime,
       updateJournal,
       updateSettings,
       migrateToGoogleSheets,

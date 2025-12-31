@@ -1,13 +1,15 @@
 import React from 'react';
 import { ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth } from 'date-fns';
 import { Card } from '../ui/Card';
-import { BarChart3 } from 'lucide-react';
+import { Button } from '../ui/Button';
+import { BarChart3, ChevronLeft, ChevronRight } from 'lucide-react';
 
-export const DailyProgressChart = ({ currentDate, logs }) => {
+export const DailyProgressChart = ({ currentDate, logs, onPrevMonth, onNextMonth }) => {
   const monthStart = startOfMonth(currentDate);
   const monthEnd = endOfMonth(currentDate);
   const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
+  const isCurrentMonth = isSameMonth(currentDate, new Date());
 
   const data = daysInMonth.map(day => {
     const dateStr = format(day, 'yyyy-MM-dd');
@@ -20,14 +22,33 @@ export const DailyProgressChart = ({ currentDate, logs }) => {
 
   return (
     <Card className="bg-[var(--bg-card)] border-[var(--border-base)] rounded-2xl p-6">
-      <div className="mb-6">
-        <h3 className="text-lg font-bold text-[var(--text-base)] flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
-          Daily Progress
-        </h3>
-        <p className="text-sm text-[var(--text-muted)]">
-          Track how many habits you complete each day this month
-        </p>
+      <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <h3 className="text-lg font-bold text-[var(--text-base)] flex items-center gap-2">
+            <BarChart3 className="w-5 h-5" />
+            Daily Progress
+          </h3>
+          <p className="text-sm text-[var(--text-muted)]">
+            Track how many habits you complete each day
+          </p>
+        </div>
+
+        <div className="flex items-center gap-2 bg-[var(--bg-app)] rounded-lg p-1 self-start sm:self-auto">
+          <Button variant="ghost" size="sm" onClick={onPrevMonth}>
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <span className="text-sm font-medium min-w-[100px] text-center">
+            {format(currentDate, 'MMMM yyyy')}
+          </span>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={onNextMonth}
+            disabled={isCurrentMonth}
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
       </div>
 
       <div className="h-[250px] w-full">
@@ -72,6 +93,8 @@ export const DailyProgressChart = ({ currentDate, logs }) => {
               fillOpacity={1} 
               fill="url(#colorCount)" 
               animationDuration={1500}
+              dot={{ r: 4, strokeWidth: 2, fill: 'var(--bg-card)', stroke: 'var(--color-primary-500)' }}
+              activeDot={{ r: 6, strokeWidth: 2, fill: 'var(--color-primary-500)', stroke: 'var(--bg-card)' }}
             />
           </AreaChart>
         </ResponsiveContainer>

@@ -23,9 +23,12 @@ const StatCard = ({ icon: Icon, label, value, color }) => (
   </Card>
 );
 
+import { AddHabitModal } from '../ui/modals/AddHabitModal';
+
 export const Dashboard = () => {
   const { habits, logs, settings, updateSleep, addHabit, refreshData, syncing } = useData();
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
   
   // Calculate Stats for the month/current status
   const dateStr = format(new Date(), 'yyyy-MM-dd');
@@ -69,11 +72,9 @@ export const Dashboard = () => {
     setCurrentDate(prev => direction === 'prev' ? subDays(startOfMonth(prev), 1) : addDays(endOfMonth(prev), 1));
   };
 
-  const handleAddHabit = () => {
-    const name = window.prompt("Enter habit name:");
-    if (name && name.trim()) {
-      addHabit(name.trim());
-    }
+  const handleAddHabit = (name, color, icon) => {
+    addHabit(name, color, icon);
+    setIsAddHabitOpen(false);
   };
 
   const handleSync = async () => {
@@ -86,6 +87,11 @@ export const Dashboard = () => {
 
   return (
     <div className="space-y-8 pb-10">
+      <AddHabitModal 
+        isOpen={isAddHabitOpen} 
+        onClose={() => setIsAddHabitOpen(false)} 
+        onAdd={handleAddHabit} 
+      />
       {/* Header */}
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -112,7 +118,7 @@ export const Dashboard = () => {
                 <RefreshCw className={`w-4 h-4 mr-2 ${syncing ? 'animate-spin' : ''}`} />
                 {syncing ? 'Syncing...' : 'Sync'}
               </Button>
-              <Button onClick={handleAddHabit} className="flex-1 sm:flex-none justify-center">
+              <Button onClick={() => setIsAddHabitOpen(true)} className="flex-1 sm:flex-none justify-center">
                   <Plus className="w-4 h-4 mr-2" />
                   Add Habit
               </Button>
@@ -135,7 +141,12 @@ export const Dashboard = () => {
 
       {/* Middle: Chart */}
       <div>
-        <DailyProgressChart currentDate={currentDate} logs={logs} />
+        <DailyProgressChart 
+          currentDate={currentDate} 
+          logs={logs} 
+          onPrevMonth={() => handleMonthChange('prev')} 
+          onNextMonth={() => handleMonthChange('next')} 
+        />
       </div>
 
       {/* Bottom: Colored Stats & Sleep */}

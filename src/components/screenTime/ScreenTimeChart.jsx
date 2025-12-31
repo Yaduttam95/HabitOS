@@ -1,20 +1,17 @@
 import React from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth } from 'date-fns';
-import { Card } from '../ui/Card';
+import { format, subDays, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 
-export const SleepChart = ({ logs, days = 14, height = 300, showAxis = true, selectedMonth = null }) => {
+export const ScreenTimeChart = ({ logs, days = 14, height = 300, showAxis = true, selectedMonth = null }) => {
   const data = React.useMemo(() => {
     let interval;
     
     if (selectedMonth) {
-      // Show full month
       interval = eachDayOfInterval({
         start: startOfMonth(selectedMonth),
         end: endOfMonth(selectedMonth)
       });
     } else {
-      // Show last N days
       const end = new Date();
       const start = subDays(end, days - 1);
       interval = eachDayOfInterval({ start, end });
@@ -23,9 +20,9 @@ export const SleepChart = ({ logs, days = 14, height = 300, showAxis = true, sel
     return interval.map(date => {
       const dateStr = format(date, 'yyyy-MM-dd');
       return {
-        date: format(date, 'd'), // Just day number for cleaner chart
+        date: format(date, 'd'),
         fullDate: dateStr,
-        hours: logs[dateStr]?.sleep ? parseFloat(logs[dateStr].sleep) : 0
+        hours: logs[dateStr]?.screenTime ? parseFloat(logs[dateStr].screenTime) : 0
       };
     });
   }, [logs, days, selectedMonth]);
@@ -35,7 +32,7 @@ export const SleepChart = ({ logs, days = 14, height = 300, showAxis = true, sel
       <ResponsiveContainer>
         <AreaChart data={data}>
           <defs>
-            <linearGradient id="colorSleep" x1="0" y1="0" x2="0" y2="1">
+            <linearGradient id="colorScreenTime" x1="0" y1="0" x2="0" y2="1">
               <stop offset="5%" stopColor="var(--color-primary-500)" stopOpacity={0.8}/>
               <stop offset="95%" stopColor="var(--color-primary-500)" stopOpacity={0}/>
             </linearGradient>
@@ -71,7 +68,7 @@ export const SleepChart = ({ logs, days = 14, height = 300, showAxis = true, sel
             dataKey="hours" 
             stroke="var(--color-primary-500)" 
             fillOpacity={1} 
-            fill="url(#colorSleep)" 
+            fill="url(#colorScreenTime)" 
             dot={{ r: 4, strokeWidth: 2, fill: 'var(--bg-card)', stroke: 'var(--color-primary-500)' }}
             activeDot={{ r: 6, strokeWidth: 2, fill: 'var(--color-primary-500)', stroke: 'var(--bg-card)' }}
           />

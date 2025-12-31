@@ -1,16 +1,53 @@
-# React + Vite
+# Habit Tracker OS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A beautiful, premium, and personal Habit Tracker application that helps you organize your life, track your habits, and visualize your progress. 
 
-Currently, two official plugins are available:
+Focused on privacy and simplicity, it uses **Google Sheets** as your personal database—meaning you own your data completely.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+![Habit Tracker Dashboard](./public/dashboard-preview.png)
+*(Note: Add a screenshot of your dashboard here)*
 
-## React Compiler
+## ✨ Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+*   **Habit Tracking**: Create unlimited habits with custom colors and icons.
+*   **Daily Logging**: Mark habits as complete/incomplete for any day.
+*   **Sleep Tracker**: detailed sleep logging and trend visualization.
+*   **Screen Time Tracker**: Monitor your digital wellness with daily logs and monthly charts.
+*   **Journaling**: Write daily reflection notes.
+*   **Analytics**: 
+    *   Daily Progress Charts
+    *   Monthly Grid Views
+    *   Completion Rates & Best Day Stats
+*   **Offline Capable**: Works offline with local mock data if the API is unreachable.
+*   **Responsive Design**: Works on Desktop, Tablet, and Mobile.
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Setting up your own instance is easy. Everything is split into two parts: the Backend (Google Sheets) and the Frontend (React App).
+
+### Step 1: Backend Setup
+First, send up your Google Sheet database.
+👉 **[Read the Backend Setup Guide](./docs/BACKEND_SETUP.md)**
+
+### Step 2: Frontend Setup
+Next, run the application locally on your computer.
+👉 **[Read the Frontend Setup Guide](./docs/FRONTEND_SETUP.md)**
+
+## 🛠 Tech Stack
+
+*   **Frontend**: React, Vite
+*   **Styling**: Tailwind CSS
+*   **Icons**: Lucide React
+*   **Charts**: Recharts
+*   **Date Handling**: Date-fns
+*   **Backend**: Google Apps Script + Google Sheets
+
+## 📂 Project Structure
+
+*   `src/components`: UI components organized by feature (Habits, Sleep, ScreenTime, etc.)
+*   `src/context`: React Context for state management
+*   `src/services`: API connectors for Google Apps Script
+*   `googleappscript.js`: The source code for the Google Apps Script backend
+
+---
+*Created by Yaduttam Pareek*
