@@ -1,6 +1,13 @@
 import { format, subDays, eachDayOfInterval } from 'date-fns';
 
-const API_URL = import.meta.env.VITE_APPS_SCRIPT_URL;
+const RAW_API_URL = import.meta.env.VITE_APPS_SCRIPT_URL;
+
+// CORS proxy to bypass Google Apps Script restrictions
+// Using proxy in production too because Google's redirects often trigger strict CORS blocks
+const USE_CORS_PROXY = true;
+const CORS_PROXY = 'https://corsproxy.io/?';
+
+const API_URL = USE_CORS_PROXY ? CORS_PROXY + encodeURIComponent(RAW_API_URL) : RAW_API_URL;
 
 // Cache for performance
 let cache = {
