@@ -48,14 +48,10 @@ export const DataProvider = ({ children }) => {
       // Auto-Sync on First Load (Fresh Session) logic
       // If we have 0 habits loaded from sessionStorage, it's likely a fresh session
       // (Unless the user truly has 0 habits, in which case a sync won't hurt)
-      if (loadedHabits.length === 0) {
-        console.log('Fresh session detected. Auto-syncing...');
-        // We call refreshData() but we don't await it to let UI render empty state first
-        // or we await it if we want to show loading spinner. 
-        // Let's trigger it in background so it feels snappy?
-        // Actually user wants "Sync automatically", so let's just call it.
-        refreshData(); 
-      }
+      // Auto-Sync on Load (Always)
+      // We trigger a background sync to ensure we have the latest data from the backend
+      // We catch the error here to prevent unhandled promise rejection since we don't await it
+      refreshData().catch(e => console.warn('Background sync on load failed:', e));
       
       // Configure storage adapter
       storage.setUseGoogleSheets(loadedSettings.useGoogleSheets || false);
@@ -122,7 +118,10 @@ export const DataProvider = ({ children }) => {
       
       await storage.deleteHabit(id);
       
-      // Refresh habits list
+      // Auto-sync after delete
+      await storage.syncData();
+      
+      // Refresh habits list (now from fresh sync data)
       const updatedHabits = await storage.getHabits();
       setHabits(updatedHabits);
     } catch (err) {
