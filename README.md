@@ -1,4 +1,7 @@
-# Habit Tracker OS
+<div align="center">
+  <img src="./public/logo.png" alt="Habit OS Logo" width="120" />
+  <h1>Habit OS</h1>
+</div>
 
 A beautiful, premium, and personal Habit Tracker application that helps you organize your life, track your habits, and visualize your progress. 
 

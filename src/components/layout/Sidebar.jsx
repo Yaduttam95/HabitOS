@@ -42,8 +42,8 @@ export const Sidebar = ({ isOpen, onClose }) => {
     >
       <div className="flex items-center justify-between mb-10 px-2">
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center">
-            <Calendar className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden bg-white p-1">
+            <img src="/logo.png" alt="Habit OS Logo" className="w-full h-full object-contain" />
           </div>
           <h1 className="text-xl font-bold bg-gradient-to-r from-[var(--text-base)] to-[var(--text-muted)] bg-clip-text text-transparent">
             Habit OS
