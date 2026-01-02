@@ -238,6 +238,27 @@ export async function updateSettings(settingsObj) {
   return settingsObj;
 }
 
+export async function syncAll(changes = [], days = 90) {
+  const data = await fetchAPI(API_URL, {
+    method: 'POST',
+    body: JSON.stringify({
+      action: 'sync',
+      changes,
+      days
+    })
+  });
+  
+  // Update cache with the fresh data we just got
+  if (data.habits) {
+    cache.habits = data.habits;
+    cache.timestamp = Date.now();
+  }
+  if (data.logs) cache.logs = data.logs;
+  if (data.settings) cache.settings = data.settings;
+  
+  return data;
+}
+
 // ============================================
 // CACHE MANAGEMENT
 // ============================================

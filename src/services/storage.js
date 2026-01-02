@@ -27,54 +27,30 @@ class StorageAdapter {
 
   // Main Sync Function - Called by "Sync" button
   async syncData() {
-    // 1. Push Pending Changes
-    if (this.pendingChanges.length > 0) {
-      console.log('Pushing pending changes:', this.pendingChanges);
+    // 1. Unified Sync (Push + Pull in one request)
+    try {
+      console.log('Syncing data...', this.pendingChanges.length, 'changes');
       
-      // Process queue sequentially to maintain order
-      for (const change of this.pendingChanges) {
-        try {
-          switch (change.action) {
-            case 'addHabit':
-              await appsScript.addHabit(change.data.name, change.data.color, change.data.icon, change.data.id);
-              break;
-            case 'deleteHabit':
-              await appsScript.deleteHabit(change.data.id);
-              break;
-            case 'updateLog':
-              await appsScript.updateLog(change.data.dateStr, change.data.logData);
-              break;
-            case 'updateSettings':
-              await appsScript.updateSettings(change.data.settings);
-              break;
-          }
-        } catch (error) {
-          console.error('Failed to sync change:', change, error);
-          // If a change fails, we stop syncing to prevent data corruption
-          // In a more advanced app, we might retry or have a deadlock queue
-          throw new Error('Sync failed. Please try again.');
-        }
-      }
+      const response = await appsScript.syncAll(this.pendingChanges || []);
       
       // Clear queue after successful sync
-      this.pendingChanges = [];
-      this.saveQueue();
+      if (this.pendingChanges.length > 0) {
+        this.pendingChanges = [];
+        this.saveQueue();
+      }
+      
+      const { habits, logs, settings } = response;
+
+      // 3. Update Storage (Habits/Logs -> Session, Settings -> Local)
+      sessionStorage.setItem('habits', JSON.stringify(habits));
+      sessionStorage.setItem('logs', JSON.stringify(logs));
+      localStorage.setItem('settings', JSON.stringify(settings));
+
+      return { habits, logs, settings };
+    } catch (error) {
+      console.error('Failed to sync data:', error);
+      throw new Error('Sync failed. Please try again.');
     }
-
-    // 2. Pull Fresh Data
-    const [habits, logs, settings] = await Promise.all([
-        appsScript.getHabits(false), // force fetch
-        appsScript.getLogs(90, false),
-        appsScript.getSettings(false)
-    ]);
-
-    // 3. Update Local Storage with fresh data
-    // 3. Update Storage (Habits/Logs -> Session, Settings -> Local)
-    sessionStorage.setItem('habits', JSON.stringify(habits));
-    sessionStorage.setItem('logs', JSON.stringify(logs));
-    localStorage.setItem('settings', JSON.stringify(settings));
-
-    return { habits, logs, settings };
   }
 
   // ============================================

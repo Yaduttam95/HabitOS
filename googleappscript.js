@@ -45,19 +45,69 @@ function doPost(e) {
     
     switch(params.action) {
       case 'addHabit':
-        return jsonResponse(addHabit(params.name, params.color, params.icon));
+        return jsonResponse(addHabit(params.name, params.color, params.icon, params.id)); // Ensure params.id is passed if available
       case 'deleteHabit':
         return jsonResponse(deleteHabit(params.id));
       case 'updateLog':
         return jsonResponse(updateLog(params.date, params.data));
       case 'updateSetting':
         return jsonResponse(updateSetting(params.key, params.value));
+      case 'sync':
+        // 1. Process Changes
+        const syncResults = processBatch(params.changes || []);
+        
+        // 2. Fetch Fresh Data (Global Sync)
+        const days = parseInt(params.days) || 90;
+        return jsonResponse({
+          success: true,
+          results: syncResults.results,
+          habits: getHabits().habits,
+          logs: getLogs(days).logs,
+          settings: getSettings().settings
+        });
       default:
         return jsonResponse({ error: 'Invalid action' }, 400);
     }
   } catch (error) {
     return jsonResponse({ error: error.toString() }, 500);
   }
+}
+
+function processBatch(changes) {
+  const results = [];
+  // Process sequentially
+  for (let i = 0; i < changes.length; i++) {
+    const change = changes[i];
+    try {
+      let result;
+      switch (change.action) {
+        case 'addHabit':
+          result = addHabit(change.data.name, change.data.color, change.data.icon, change.data.id);
+          break;
+        case 'deleteHabit':
+          result = deleteHabit(change.data.id);
+          break;
+        case 'updateLog':
+          result = updateLog(change.data.dateStr, change.data.logData);
+          break;
+        case 'updateSettings':
+          // Handle object of settings
+          if (change.data.settings) {
+            for (const key in change.data.settings) {
+               updateSetting(key, change.data.settings[key]);
+            }
+          }
+          result = { success: true };
+          break;
+        default:
+          result = { success: false, error: 'Unknown action' };
+      }
+      results.push(result);
+    } catch (e) {
+      results.push({ success: false, error: e.toString() });
+    }
+  }
+  return { success: true, results };
 }
 // ============================================
 // HABITS OPERATIONS
