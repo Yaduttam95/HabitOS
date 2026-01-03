@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X, Smartphone, DollarSign } from 'lucide-react';
+import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X, Smartphone, DollarSign, Github } from 'lucide-react';
 import clsx from 'clsx';
 
 const NavItem = ({ to, icon: Icon, label, onClick }) => (
@@ -83,7 +83,16 @@ export const Sidebar = ({ isOpen, onClose }) => {
         ))}
       </nav>
 
-      <div className="mt-auto pt-6 border-t border-[var(--border-base)]">
+      <div className="mt-auto pt-6 border-t border-[var(--border-base)] space-y-1">
+        <a 
+          href="https://github.com/Yaduttam95/HabitOS" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="relative flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group overflow-hidden text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-base)]"
+        >
+          <Github className="w-[22px] h-[22px] transition-transform duration-300 group-hover:scale-110 relative z-10" />
+          <span className="text-sm tracking-wide relative z-10 font-medium">Star on GitHub</span>
+        </a>
         <NavItem 
           to="/settings" 
           icon={Settings} 

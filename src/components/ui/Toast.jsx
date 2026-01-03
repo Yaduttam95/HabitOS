@@ -32,9 +32,9 @@ export const Toast = ({ message, type = 'success', onClose, duration = 3000 }) =
   return (
     <div 
       className={`
-        fixed bottom-6 right-6 z-50 flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl
+        fixed top-6 right-6 z-[100] flex items-center gap-3 px-4 py-3 rounded-xl border backdrop-blur-md shadow-2xl
         transition-all duration-300 ease-out transform
-        ${isVisible ? 'translate-y-0 opacity-100 scale-100' : 'translate-y-4 opacity-0 scale-95'}
+        ${isVisible ? 'translate-y-0 opacity-100 scale-100' : '-translate-y-4 opacity-0 scale-95'}
         ${styles[type]}
         min-w-[300px]
       `}
