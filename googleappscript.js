@@ -14,7 +14,7 @@
 //
 // SHEET HEADERS:
 // Habits: id | name | createdAt | color | icon
-// DailyLogs: date | completedHabits | sleep | journal | screenTime
+// DailyLogs: date | completedHabits | sleep | journal | screenTime | moneySpent
 // Settings: key | value
 //
 // ============================================
@@ -175,11 +175,29 @@ function getLogs(days = 90) {
       const date = new Date(data[i][0]);
       if (date >= cutoffDate) {
         const dateStr = formatDate(date);
+        
+        // Handle moneySpent: could be legacy number OR new JSON array
+        let expenses = [];
+        const rawMoney = data[i][5];
+        
+        try {
+          if (typeof rawMoney === 'number') {
+            if (rawMoney > 0) {
+              expenses = [{ id: 'legacy-' + i, item: 'Uncategorized', amount: rawMoney, category: 'General' }];
+            }
+          } else if (typeof rawMoney === 'string' && rawMoney.startsWith('[')) {
+            expenses = JSON.parse(rawMoney);
+          }
+        } catch (e) {
+          // Fallback empty
+        }
+
         logs[dateStr] = {
           completedHabits: data[i][1] ? JSON.parse(data[i][1]) : [],
           sleep: data[i][2] || 0,
           journal: data[i][3] || '',
-          screenTime: data[i][4] || 0
+          screenTime: data[i][4] || 0,
+          moneySpent: expenses // Now returns an array of expense objects
         };
       }
     }
@@ -187,6 +205,7 @@ function getLogs(days = 90) {
   
   return { success: true, logs };
 }
+
 function updateLog(dateStr, logData) {
   const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('DailyLogs');
   const data = sheet.getDataRange().getValues();
@@ -204,6 +223,9 @@ function updateLog(dateStr, logData) {
   const sleep = logData.sleep || 0;
   const journal = logData.journal || '';
   const screenTime = logData.screenTime || 0;
+  // Try to determine if moneySpent is the old number or new array
+  const rawExpenses = logData.moneySpent;
+  const moneySpent = Array.isArray(rawExpenses) ? JSON.stringify(rawExpenses) : JSON.stringify([]);
   
   if (rowIndex > 0) {
     // Update existing row
@@ -211,9 +233,10 @@ function updateLog(dateStr, logData) {
     sheet.getRange(rowIndex, 3).setValue(sleep);
     sheet.getRange(rowIndex, 4).setValue(journal);
     sheet.getRange(rowIndex, 5).setValue(screenTime);
+    sheet.getRange(rowIndex, 6).setValue(moneySpent);
   } else {
     // Append new row
-    sheet.appendRow([dateStr, completedHabits, sleep, journal, screenTime]);
+    sheet.appendRow([dateStr, completedHabits, sleep, journal, screenTime, moneySpent]);
   }
   
   return { success: true, message: 'Log updated' };

@@ -209,6 +209,25 @@ export const DataProvider = ({ children }) => {
     }
   };
 
+  const addExpense = async (date, item, amount, category) => {
+    try {
+      setSyncing(true);
+      setError(null);
+      
+      await storage.addExpense(date, item, amount, category);
+      
+      // Refresh logs
+      const updatedLogs = await storage.getLogs();
+      setLogs(updatedLogs);
+    } catch (err) {
+      console.error('Error adding expense:', err);
+      setError('Failed to add expense');
+      throw err;
+    } finally {
+      setSyncing(false);
+    }
+  };
+
   const updateSettings = async (newSettings) => {
     try {
       setSyncing(true);
@@ -275,6 +294,7 @@ export const DataProvider = ({ children }) => {
       updateSleep,
       updateScreenTime,
       updateJournal,
+      addExpense,
       updateSettings,
       migrateToGoogleSheets,
       refreshData

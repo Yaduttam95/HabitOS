@@ -9,6 +9,7 @@ import { ScreenTimePage } from './components/screenTime/ScreenTimePage';
 import { ReportsPage } from './components/reports/ReportsPage';
 import { SettingsPage } from './components/settings/SettingsPage';
 import { JournalPage } from './components/journal/JournalPage';
+import FinanceTracker from './components/finance/FinanceTracker';
 
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
             <Route path="/habits" element={<HabitsPage />} />
             <Route path="/sleep" element={<SleepPage />} />
             <Route path="/screentime" element={<ScreenTimePage />} />
+            <Route path="/finance" element={<FinanceTracker />} />
             <Route path="/reports" element={<ReportsPage />} />
             <Route path="/journal" element={<JournalPage />} />
             <Route path="/settings" element={<SettingsPage />} />

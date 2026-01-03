@@ -179,6 +179,38 @@ class StorageAdapter {
     logs[dateStr] = updatedLog;
     sessionStorage.setItem('logs', JSON.stringify(logs));
     
+    this.queueChange('updateLog', { dateStr, logData: updatedLog });
+    
+    return updatedLog;
+  }
+
+  async addExpense(dateStr, item, amount, category = 'General') {
+    const logs = await this.getLogs();
+    const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '', screenTime: 0, moneySpent: [] };
+    
+    // Ensure moneySpent is an array (handle legacy migration on client side)
+    let currentExpenses = log.moneySpent;
+    if (typeof currentExpenses === 'number') {
+      currentExpenses = currentExpenses > 0 ? [{ id: 'legacy', item: 'Uncategorized', amount: currentExpenses, category: 'General' }] : [];
+    } else if (!Array.isArray(currentExpenses)) {
+      currentExpenses = [];
+    }
+
+    const newExpense = {
+      id: Date.now().toString(),
+      item,
+      amount,
+      category,
+      timestamp: new Date().toISOString()
+    };
+    
+    // 1. Update Session
+    const updatedExpenses = [...currentExpenses, newExpense];
+    const updatedLog = { ...log, moneySpent: updatedExpenses };
+    
+    logs[dateStr] = updatedLog;
+    sessionStorage.setItem('logs', JSON.stringify(logs));
+    
     // 2. Queue Change
     this.queueChange('updateLog', { dateStr, logData: updatedLog });
     

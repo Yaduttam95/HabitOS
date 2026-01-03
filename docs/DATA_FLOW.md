@@ -94,7 +94,7 @@ Your data isn't hidden in a binary blob. It lives in readable rows in YOUR Googl
 | Sheet Name | Columns | Description |
 | :--- | :--- | :--- |
 | **Habits** | `id`, `name`, `color`, `icon` | Configuration for your tracker. |
-| **DailyLogs** | `date`, `completedHabits`, `sleep`, `journal` | The heavy lifting. A JSON array stores completion IDs. |
+| **DailyLogs** | `date`, `completedHabits`, `sleep`, `journal`, `screenTime`, `moneySpent` | The heavy lifting. A JSON array stores completion IDs and expense details. |
 | **Settings** | `key`, `value` | App preferences (Theme, Mode). |
 
 ## 4. Why Developers Love This

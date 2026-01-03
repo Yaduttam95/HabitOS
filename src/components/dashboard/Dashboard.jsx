@@ -13,21 +13,29 @@ import { calculateStreak } from '../../utils/stats';
 
 import { TrendingUp, Award, Calendar, CheckCircle2 } from 'lucide-react';
 
-const StatCard = ({ icon: Icon, label, value, colorClass }) => (
-  <Card className={`relative overflow-hidden group hover:border-${colorClass}-500/50 transition-colors`}>
-    <div className={`absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity text-${colorClass}-500`}>
-      <Icon className="w-16 h-16 transform translate-x-4 -translate-y-4" />
+const StatCard = ({ icon: Icon, label, value, gradient, delay }) => (
+  <div className={`relative overflow-hidden rounded-2xl p-6 text-white shadow-lg ${gradient} transform transition-all duration-500 hover:scale-[1.02]`} style={{ animationDelay: `${delay}ms` }}>
+    {/* Background Glow Effect */}
+    <div className="absolute top-0 right-0 p-16 bg-white/10 rounded-full blur-3xl -mr-8 -mt-8 pointer-events-none"></div>
+    
+    {/* Large Background Icon */}
+    <div className="absolute top-0 right-0 p-4 opacity-10 pointer-events-none">
+      <Icon className="w-24 h-24 text-white transform translate-x-6 -translate-y-6 rotate-12" />
     </div>
-    <div className="relative z-10 flex flex-col justify-between h-full space-y-2">
-      <div className={`p-2 w-fit rounded-lg bg-${colorClass}-500/10 text-${colorClass}-500`}>
-        <Icon className="w-5 h-5" />
+    
+    <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
+      <div className="flex justify-between items-start">
+        <div className="p-3 bg-white/20 rounded-xl backdrop-blur-sm border border-white/10 w-fit">
+          <Icon className="w-6 h-6 text-white" />
+        </div>
       </div>
+      
       <div>
-        <h3 className="text-2xl font-bold text-[var(--text-base)]">{value}</h3>
-        <p className="text-sm font-medium text-[var(--text-muted)]">{label}</p>
+        <h3 className="text-3xl font-bold mb-1 tracking-tight">{value}</h3>
+        <p className="text-sm font-medium text-white/80">{label}</p>
       </div>
     </div>
-  </Card>
+  </div>
 );
 
 import { AddHabitModal } from '../ui/modals/AddHabitModal';
@@ -162,25 +170,29 @@ export const Dashboard = () => {
             icon={CheckCircle2}
             label="Total Completed"
             value={totalCompleted}
-            colorClass="blue"
+            gradient="bg-gradient-to-br from-blue-500 to-indigo-600 shadow-blue-500/20"
+            delay={0}
         />
         <StatCard 
             icon={TrendingUp}
             label="Average Rate"
             value={`${averageRate}%`}
-            colorClass="emerald"
+            gradient="bg-gradient-to-br from-emerald-500 to-teal-600 shadow-emerald-500/20"
+            delay={100}
         />
         <StatCard 
             icon={Award}
             label="Best Day"
             value={bestDayCount}
-            colorClass="purple"
+            gradient="bg-gradient-to-br from-violet-500 to-purple-600 shadow-purple-500/20"
+            delay={200}
         />
         <StatCard 
             icon={Calendar}
             label="Active Days"
             value={activeDays}
-            colorClass="orange"
+            gradient="bg-gradient-to-br from-orange-500 to-red-600 shadow-orange-500/20"
+            delay={300}
         />
       </div>
       

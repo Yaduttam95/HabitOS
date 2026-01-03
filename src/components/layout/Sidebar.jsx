@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X, Smartphone } from 'lucide-react';
+import { Home, Target, Moon, TrendingUp, BookOpen, Settings, Calendar, X, Smartphone, DollarSign } from 'lucide-react';
 import clsx from 'clsx';
 
 const NavItem = ({ to, icon: Icon, label, onClick }) => (
@@ -9,23 +9,25 @@ const NavItem = ({ to, icon: Icon, label, onClick }) => (
     onClick={onClick}
     className={({ isActive }) =>
       clsx(
-        'relative flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group',
+        'relative flex items-center gap-3 px-4 py-3.5 rounded-2xl transition-all duration-300 group overflow-hidden',
         isActive
-          ? 'bg-primary-500/10 text-primary-500 font-semibold shadow-sm'
+          ? 'bg-gradient-to-r from-primary-500/20 to-primary-500/5 text-primary-500 font-semibold shadow-sm border border-primary-500/10'
           : 'text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-base)]'
       )
     }
   >
     {({ isActive }) => (
       <>
+        {/* Active Indicator Glow */}
+        {isActive && (
+           <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-primary-400 to-primary-600 rounded-r-full" />
+        )}
+        
         <Icon className={clsx(
-          "w-[22px] h-[22px] transition-transform duration-300 group-hover:scale-110",
+          "w-[22px] h-[22px] transition-transform duration-300 group-hover:scale-110 relative z-10",
           isActive ? "text-primary-500" : "text-current"
         )} />
-        <span className="text-sm tracking-wide">{label}</span>
-        {isActive && (
-          <div className="absolute right-3 w-1.5 h-1.5 rounded-full bg-primary-500 blur-[1px]" />
-        )}
+        <span className="text-sm tracking-wide relative z-10">{label}</span>
       </>
     )}
   </NavLink>
@@ -36,6 +38,7 @@ export const Sidebar = ({ isOpen, onClose }) => {
     { path: '/', label: 'Dashboard', icon: Home },
     { path: '/habits', label: 'Habits', icon: Target },
     { path: '/sleep', label: 'Sleep', icon: Moon },
+    { path: '/finance', label: 'Finance', icon: DollarSign },
     { path: '/screentime', label: 'Screen Time', icon: Smartphone },
     { path: '/reports', label: 'Reports', icon: TrendingUp },
     { path: '/journal', label: 'Journal', icon: BookOpen },
