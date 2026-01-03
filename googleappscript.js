@@ -223,9 +223,10 @@ function updateLog(dateStr, logData) {
   const sleep = logData.sleep || 0;
   const journal = logData.journal || '';
   const screenTime = logData.screenTime || 0;
+  
   // Try to determine if moneySpent is the old number or new array
   const rawExpenses = logData.moneySpent;
-  const moneySpent = Array.isArray(rawExpenses) ? JSON.stringify(rawExpenses) : JSON.stringify([]);
+  const moneySpent = (rawExpenses !== undefined && Array.isArray(rawExpenses)) ? JSON.stringify(rawExpenses) : JSON.stringify([]);
   
   if (rowIndex > 0) {
     // Update existing row
@@ -233,7 +234,11 @@ function updateLog(dateStr, logData) {
     sheet.getRange(rowIndex, 3).setValue(sleep);
     sheet.getRange(rowIndex, 4).setValue(journal);
     sheet.getRange(rowIndex, 5).setValue(screenTime);
-    sheet.getRange(rowIndex, 6).setValue(moneySpent);
+    
+    // Only update moneySpent if it was actually provided
+    if (rawExpenses !== undefined && Array.isArray(rawExpenses)) {
+      sheet.getRange(rowIndex, 6).setValue(moneySpent);
+    }
   } else {
     // Append new row
     sheet.appendRow([dateStr, completedHabits, sleep, journal, screenTime, moneySpent]);

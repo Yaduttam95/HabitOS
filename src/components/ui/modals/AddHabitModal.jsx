@@ -9,12 +9,12 @@ export const AddHabitModal = ({ isOpen, onClose, onAdd }) => {
   const [color, setColor] = useState('indigo');
 
   const colors = [
-    { value: 'indigo', label: 'Indigo' },
-    { value: 'emerald', label: 'Emerald' },
-    { value: 'rose', label: 'Rose' },
-    { value: 'amber', label: 'Amber' },
-    { value: 'cyan', label: 'Cyan' },
-    { value: 'violet', label: 'Violet' },
+    { value: 'indigo', label: 'Indigo', hex: '#6366f1' },
+    { value: 'emerald', label: 'Emerald', hex: '#10b981' },
+    { value: 'rose', label: 'Rose', hex: '#f43f5e' },
+    { value: 'amber', label: 'Amber', hex: '#f59e0b' },
+    { value: 'cyan', label: 'Cyan', hex: '#06b6d4' },
+    { value: 'violet', label: 'Violet', hex: '#8b5cf6' },
   ];
 
   const handleSubmit = (e) => {
@@ -54,7 +54,7 @@ export const AddHabitModal = ({ isOpen, onClose, onAdd }) => {
                 className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${
                   color === c.value ? 'border-[var(--text-base)] scale-110' : 'border-transparent'
                 }`}
-                style={{ backgroundColor: `var(--color-${c.value}-500)` }}
+                style={{ backgroundColor: c.hex }}
                 title={c.label}
               />
             ))}

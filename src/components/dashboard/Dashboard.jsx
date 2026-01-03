@@ -39,11 +39,13 @@ const StatCard = ({ icon: Icon, label, value, gradient, delay }) => (
 );
 
 import { AddHabitModal } from '../ui/modals/AddHabitModal';
+import { Toast } from '../ui/Toast';
 
 export const Dashboard = () => {
   const { habits, logs, settings, updateSleep, addHabit, refreshData, syncing } = useData();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [isAddHabitOpen, setIsAddHabitOpen] = useState(false);
+  const [toast, setToast] = useState(null); // { message, type }
   
   // Calculate Stats for the month/current status
   const dateStr = format(new Date(), 'yyyy-MM-dd');
@@ -95,13 +97,21 @@ export const Dashboard = () => {
   const handleSync = async () => {
     try {
       await refreshData();
+      setToast({ message: 'Sync Complete! Your data stays consistent.', type: 'success' });
     } catch (error) {
-      alert('Sync failed. Please check your internet connection.');
+      setToast({ message: 'Sync failed. Please check your connection.', type: 'error' });
     }
   };
 
   return (
-    <div className="space-y-8 pb-10">
+    <div className="space-y-8 pb-10 relative">
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
       <AddHabitModal 
         isOpen={isAddHabitOpen} 
         onClose={() => setIsAddHabitOpen(false)} 

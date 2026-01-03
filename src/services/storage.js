@@ -117,10 +117,22 @@ class StorageAdapter {
     this.queueChange('deleteHabit', { id });
   }
 
+  // Helper to ensure we have a complete log object with safe defaults
+  _getSafeLog(logs, dateStr) {
+    const existing = logs[dateStr];
+    return {
+      completedHabits: existing?.completedHabits || [],
+      sleep: existing?.sleep || 0,
+      journal: existing?.journal || '',
+      screenTime: existing?.screenTime || 0,
+      moneySpent: existing?.moneySpent || []
+    };
+  }
+
   async toggleHabit(dateStr, habitId) {
     const logs = await this.getLogs();
-    const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
-    const completedHabits = log.completedHabits || [];
+    const log = this._getSafeLog(logs, dateStr);
+    const completedHabits = [...log.completedHabits];
     
     // 1. Update Session
     const index = completedHabits.indexOf(habitId);
@@ -130,7 +142,12 @@ class StorageAdapter {
       completedHabits.push(habitId);
     }
     
-    const updatedLog = { ...log, completedHabits };
+    // Create new log object preserving all other fields
+    const updatedLog = { 
+        ...log, 
+        completedHabits
+    };
+
     logs[dateStr] = updatedLog;
     sessionStorage.setItem('logs', JSON.stringify(logs));
     
@@ -142,7 +159,7 @@ class StorageAdapter {
 
   async updateSleep(dateStr, hours) {
     const logs = await this.getLogs();
-    const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
+    const log = this._getSafeLog(logs, dateStr);
     
     // 1. Update Session
     const updatedLog = { ...log, sleep: hours };
@@ -157,7 +174,7 @@ class StorageAdapter {
 
   async updateScreenTime(dateStr, hours) {
     const logs = await this.getLogs();
-    const log = logs[dateStr] || { completedHabits: [], sleep: 0, screenTime: 0, journal: '' };
+    const log = this._getSafeLog(logs, dateStr);
     
     // 1. Update Session
     const updatedLog = { ...log, screenTime: hours };
@@ -172,7 +189,7 @@ class StorageAdapter {
 
   async updateJournal(dateStr, content) {
     const logs = await this.getLogs();
-    const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '' };
+    const log = this._getSafeLog(logs, dateStr);
     
     // 1. Update Session
     const updatedLog = { ...log, journal: content };
@@ -186,7 +203,7 @@ class StorageAdapter {
 
   async addExpense(dateStr, item, amount, category = 'General') {
     const logs = await this.getLogs();
-    const log = logs[dateStr] || { completedHabits: [], sleep: 0, journal: '', screenTime: 0, moneySpent: [] };
+    const log = this._getSafeLog(logs, dateStr);
     
     // Ensure moneySpent is an array (handle legacy migration on client side)
     let currentExpenses = log.moneySpent;
